@@ -1,9 +1,11 @@
 import React from 'react'
 import { StyleSheet, Text, View, Image, TouchableOpacity, SafeAreaView, } from 'react-native'
 
+
 import { COLORS, SIZES, FONTS, icons } from "../constants"
 
-const HeaderBar = () => {
+const HeaderBar = ({appTheme, toggleTheme}) => {
+
   return (
     <SafeAreaView
       style={{
@@ -20,7 +22,7 @@ const HeaderBar = () => {
       </View>
 
       {/* Toggle Button */}
-      <TouchableOpacity
+      {/* <TouchableOpacity
         style={{
           flexDirection: "row",
           alignItems: "center",
@@ -31,9 +33,9 @@ const HeaderBar = () => {
           marginTop: 30,
           backgroundColor: COLORS.lightPurple,
         }}
-      >
+      > */}
         {/* Sun */}
-        <View
+        {/* <View
           style={{
             width: 40,
             height: 40,
@@ -50,10 +52,10 @@ const HeaderBar = () => {
               tintcolor: COLORS.white,
             }}
           />
-        </View>
+        </View> */}
 
         {/* Moon */}
-        <View
+        {/* <View
           style={{
             width: 40,
             height: 40,
@@ -72,7 +74,7 @@ const HeaderBar = () => {
             }}
           />
         </View>
-      </TouchableOpacity>
+      </TouchableOpacity> */}
     </SafeAreaView>
   )
 }
@@ -88,5 +90,4 @@ const styles = StyleSheet.create({
   }
 })
 
-export default HeaderBar
-
+export default HeaderBar;
