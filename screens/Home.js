@@ -14,61 +14,119 @@ import {
 import { CustomButton, HeaderBar } from '../components';
 import { COLORS, FONTS, icons, SIZES, constants, dummyData, images } from '../constants';
 
+import { connect } from 'react-redux';
+
 import appTheme from '../constants/theme';
 
-const promoTabs = constants.promoTabs;
+const promoTabs = constants.promoTabs.map((promoTab) => ({
+  ...promoTab,
+  ref: React.createRef()
+}))
 
-const TabIndicator = ({}) => {
+const TabIndicator = ({ measureLayout, scrollX }) => {
+
+  const inputRange = promoTabs.map((_, i) => i * SIZES.width)
+
+  const tabIndicatorWidth = scrollX.interpolate({
+    inputRange,
+    outputRange: measureLayout.map(measure => measure.width)
+  })
+
+  const translateX = scrollX.interpolate({
+    inputRange,
+    outputRange: measureLayout.map(measure => measure.x)
+  })
+
   return (
-    <View
+    <Animated.View
       style={{
         position: 'absolute',
         height: '100%',
-        width: 100,
+        width: tabIndicatorWidth,
         left: 0,
         borderRadius: SIZES.radius,
-        backgroundColor: COLORS.primary
+        backgroundColor: COLORS.primary,
+        transform: [{
+          translateX
+        }]
       }}
-    ></View>
+    />
   )
 }
 
-const Tabs = ({appTheme}) => {
+const Tabs = ({ appTheme, scrollX, onPromoTabPress}) => {
+
+  const [measureLayout, setMeasureLayout] = React.useState([])
+  const containerRef = React.useRef()
+
+  const tabPosition = Animated.divide(scrollX, SIZES.width)
+
+  React.useEffect(() => {
+    let ml = []
+
+    promoTabs.forEach(promo => {
+      promo.ref.current.measureLayout(
+        containerRef.current,
+        (x, y, width, height) => {
+          console.log(x, y, width, height)
+
+          ml.push({
+            x, y, width, height
+          })
+
+          if(ml.length === promoTabs.length) {
+            setMeasureLayout(ml)
+          }
+        }
+      )
+    })
+  }, [containerRef.current])
+
   return (
     <View
+      ref={containerRef}
       style={{
         flexDirection: 'row',
         alignItems: 'center',
         justifyContent: 'space-between',
         marginTop: SIZES.padding,
-        backgroundColor: appTheme.tabBackgroundColor,
+        backgroundColor: COLORS.lightGray1,
         borderRadius: SIZES.radius,
       }}
     >
       {/* Tab Indicator */}
-      <TabIndicator />
+      {measureLayout.length > 0 && <TabIndicator measureLayout={measureLayout} scrollX={scrollX} />}
 
       {/* Tabs */}
       {promoTabs.map((item, index) => {
+
+        const textColor = tabPosition.interpolate({
+          inputRange: [index - 1, index, index + 1],
+          outputRange: [COLORS.lightGray2, COLORS.white, COLORS.lightGray2],
+          extrapolate: 'clamp'
+        })
+
         return (
           <TouchableOpacity
             key={`PromoTab-${index}`}
-            onPress={() => console.log(item)}
+            onPress={() => onPromoTabPress(index)}
           >
             <View
+              ref={item.ref}
               style={{
                 paddingHorizontal: 15,
                 alignItems: 'center',
                 justifyContent: 'center',
                 height: 40,
+                
               }}
             >
-              <Text
+              <Animated.Text
                 style={{
-                  color: COLORS.white,
+                  color: textColor,
                   ...FONTS.h3,
                 }}
-              >{item.title}</Text>
+              >{item.title}</Animated.Text>
             </View>
           </TouchableOpacity>
         )
@@ -80,6 +138,14 @@ const Tabs = ({appTheme}) => {
 const Home = ({ navigation }) => {
 
   const scrollX = React.useRef(new Animated.Value(0)).current
+
+  const promoScrollViewRef = React.useRef()
+
+  const onPromoTabPress = React.useCallback(promoTabIndex => {
+    promoScrollViewRef?.current?.scrollToOffset({
+      offset: promoTabIndex * SIZES.width,
+    })
+  })
 
   function renderAvailableRewards() {
     return (
@@ -174,10 +240,13 @@ const Home = ({ navigation }) => {
         {/* Header -Tabs */}
         <Tabs 
           appTheme={appTheme}
+          scrollX={scrollX}
+          onPromoTabPress={onPromoTabPress}
         />
 
         {/* Details */}
         <Animated.FlatList
+          ref={promoScrollViewRef}
           data={dummyData.promos}
           horizontal
           pagingEnabled={true}
