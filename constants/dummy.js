@@ -24,29 +24,36 @@ export const availableRewards = [
 export const locations = [
   {
     id: 1,
-    title: "Garden Grove #1",
-    address: "10189 Westminster Avenue Garden Grove, CA",
+    title: "Bubble Tea",
+    address: "550 N Green Bar Rd, IL",
     operation_hours: "Sunday - Thursday: 10AM - 11PM \nFriday - Saturday: 10AM - Midnight",
     bookmarked: true
   },
   {
     id: 2,
-    title: "Garden Grove #2",
-    address: "10189 Westminster Avenue Garden Grove, CA",
+    title: "Bubble Tea Lab",
+    address: "Libertyville, IL",
     operation_hours: "Sunday - Thursday: 10AM - 11PM \nFriday - Saturday: 10AM - Midnight",
     bookmarked: false
   },
   {
     id: 3,
-    title: "Garden Grove #3",
-    address: "10189 Westminster Avenue Garden Grove, CA",
+    title: "Chill Bubble Tea",
+    address: "Vernon Hills, IL - Hawthorn Mall",
     operation_hours: "Sunday - Thursday: 10AM - 11PM \nFriday - Saturday: 10AM - Midnight",
     bookmarked: true
   },
   {
     id: 4,
-    title: "Garden Grove #4",
-    address: "10189 Westminster Avenue Garden Grove, CA",
+    title: "Liquid Fusion Lincolnshire",
+    address: "Lincolnshire, IL - In Citypark At Lincolnshire",
+    operation_hours: "Sunday - Thursday: 10AM - 11PM \nFriday - Saturday: 10AM - Midnight",
+    bookmarked: false
+  },
+  {
+    id: 5,
+    title: "Voltage Bubble tea",
+    address: "Rosemont, IL - In Rosemont Market Place",
     operation_hours: "Sunday - Thursday: 10AM - 11PM \nFriday - Saturday: 10AM - Midnight",
     bookmarked: false
   },
