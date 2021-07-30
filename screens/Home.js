@@ -253,7 +253,7 @@ const Home = ({ navigation }) => {
           scrollEventThrottle={16}
           snapToAlignment='center'
           showHorizontalScrollIndicator={false}
-          keyExtractor={item =>`{item, id}`}
+          keyExtractor={item =>`${item.id}`}
           onScroll={Animated.event(
             [
               {nativeEvent: {contentOffset: {x: scrollX}}}
